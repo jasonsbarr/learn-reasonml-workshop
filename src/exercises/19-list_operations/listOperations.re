@@ -28,19 +28,19 @@
  */
 let myInts: list(int) = [1, 2, 3, 4, 5];
 
-let doubleMyInts = ints : list(int) => List.map(x => x * 2, ints);
+let doubleMyInts = (ints): list(int) => List.map(x => x * 2, ints);
 
-let () = assert (doubleMyInts(myInts) == [2, 4, 6, 8, 10]);
+let () = assert(doubleMyInts(myInts) == [2, 4, 6, 8, 10]);
 
-let myStrings = ints : list(string) => List.map(string_of_int, ints);
+let myStrings = (ints): list(string) => List.map(string_of_int, ints);
 
-let () = assert (myStrings(myInts) == ["1", "2", "3", "4", "5"]);
+let () = assert(myStrings(myInts) == ["1", "2", "3", "4", "5"]);
 
 /*
   Exercise: implement the value [myNewInts], which is obtained by adding 1 to
   each element of [myInts]
  */
-let myNewInts = ints => failwith("For you to implement");
+let myNewInts = ints => List.map(x => x + 1, ints);
 
 /*
   If the function you want to perform on each element of your list is one that
@@ -65,10 +65,10 @@ let () = List.iter(i => Js.log("here's an int: " ++ i), myStrings(myInts));
 
   Here's an example of using [fold_left] to compute a sum:
  */
-let sumOfMyInts = ints : int =>
+let sumOfMyInts = (ints): int =>
   List.fold_left((total, myInt) => total + myInt, 0, ints);
 
-let () = assert (sumOfMyInts(myInts) == 15);
+let () = assert(sumOfMyInts(myInts) == 15);
 
 /*
   Exercise: use [List.fold_left] to compute the number of elements of
@@ -77,7 +77,14 @@ let () = assert (sumOfMyInts(myInts) == 15);
   Hint: Use the infix operator `mod`.
     (4 mod 2 == 0)
  */
-let numEvenInts = ints => failwith("For you to implement");
+let callback = (total, current) =>
+  if (current mod 2 == 0) {
+    total + 1;
+  } else {
+    total;
+  };
+
+let numEvenInts = ints => List.fold_left(callback, 0, ints);
 
 /*
   Here's one more example of a useful list function: [List.find]:
@@ -87,7 +94,7 @@ let numEvenInts = ints => failwith("For you to implement");
  */
 let firstNumGreaterThan3 = ints => List.find(x => x > 3, ints);
 
-let () = assert (firstNumGreaterThan3(myInts) == 4);
+let () = assert(firstNumGreaterThan3(myInts) == 4);
 
 Test.runAll([
   (myNewInts(myInts) == [2, 3, 4, 5, 6], "my new ints"),
